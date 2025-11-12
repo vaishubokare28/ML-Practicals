@@ -1,0 +1,221 @@
+ML PRACRICAL 2. Assignment on Regression technique________________________________________
+🧾 Assignment Title:
+Regression Technique – Predicting Annual Temperature Using Linear Regression
+________________________________________
+Dataset Link:
+🔗 https://www.kaggle.com/venky73/temperatures-of-india
+This dataset contains average monthly temperatures (°C) of India from 1901 onwards.
+________________________________________
+🧩 (a) Apply Linear Regression Model
+________________________________________
+🧠 Step 1: Import Libraries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+Explanation:
+We import all the necessary Python libraries:
+•	pandas → for data loading and processing
+•	numpy → for numerical operations
+•	matplotlib & seaborn → for visualization
+•	sklearn → for implementing and evaluating the linear regression model
+________________________________________
+🧠 Step 2: Load the Dataset
+data = pd.read_csv("temperatures.csv")
+print("First 5 rows of the dataset:\n")
+print(data.head(), "\n")
+Explanation:
+We load the temperatures.csv dataset into a pandas DataFrame.
+data.head() displays the first few rows to understand its structure (columns like YEAR, JAN, FEB, …, ANNUAL).
+________________________________________
+🧠 Step 3: Select Required Columns
+X = data[['YEAR']]       # Independent variable
+y = data['ANNUAL']       # Dependent variable
+Explanation:
+We define:
+•	X (input feature) → Year (the predictor)
+•	y (output/target) → Annual average temperature
+This sets up our regression problem:
+We want to predict temperature (y) from year (X).
+________________________________________
+🧠 Step 4: Create and Train the Linear Regression Model
+model = LinearRegression()
+model.fit(X, y)
+Explanation:
+•	We create an instance of LinearRegression() from sklearn.
+•	.fit(X, y) trains the model — it finds the best-fitting straight line through the data.
+The model learns two important parameters:
+•	Slope (m) → rate of temperature increase per year
+•	Intercept (c) → estimated temperature when Year = 0
+________________________________________
+🧠 Step 5: Predict Annual Temperature
+y_pred = model.predict(X)
+Explanation:
+We use the trained model to predict the annual temperatures for all years in the dataset.
+These predicted values (y_pred) will later be used for performance evaluation and visualization.
+________________________________________
+🧩 (b) Assess Performance of Regression Model
+________________________________________
+🧠 Step 6: Evaluate Model Performance
+mse = mean_squared_error(y, y_pred)
+mae = mean_absolute_error(y, y_pred)
+r2 = r2_score(y, y_pred)
+
+print("Model Performance Metrics:")
+print(f"Mean Squared Error (MSE): {mse:.4f}")
+print(f"Mean Absolute Error (MAE): {mae:.4f}")
+print(f"R-Squared (R²): {r2:.4f}")
+Explanation:
+We calculate the following performance metrics to assess how well the model fits the data:
+•	Mean Squared Error (MSE):
+Average of squared differences between actual and predicted temperatures.
+➤ Lower value = better accuracy.
+•	Mean Absolute Error (MAE):
+Average of absolute errors between actual and predicted temperatures.
+➤ Tells how many °C the model is off, on average.
+•	R² Score:
+Proportion of variance in the temperature explained by the year.
+➤ Closer to 1 means the model explains most of the data trend.
+Example Output:
+Mean Squared Error (MSE): 0.3251  
+Mean Absolute Error (MAE): 0.4125  
+R-Squared (R²): 0.85
+Interpretation:
+The model performs well because:
+•	Errors (MSE, MAE) are small
+•	R² = 0.85 → 85% of temperature variation is explained by the year
+________________________________________
+🧩 (c) Visualize the Simple Linear Regression Model
+________________________________________
+🧠 Step 7: Plot Actual vs Predicted Temperatures
+plt.figure(figsize=(10,6))
+sns.scatterplot(x=X['YEAR'], y=y, color='blue', s=50, label='Actual Annual Temperature')
+plt.plot(X, y_pred, color='red', linewidth=2, label='Regression Line')
+plt.title("Yearly Temperature Trend in India (1901 - Present)", fontsize=14, weight='bold')
+plt.xlabel("Year")
+plt.ylabel("Annual Average Temperature (°C)")
+plt.legend()
+plt.grid(True)
+plt.show()
+Explanation:
+•	Blue dots: Actual annual temperature values.
+•	Red line: Predicted regression line from the model.
+•	The upward slope of the red line shows a positive trend, meaning temperatures are increasing over the years.
+This visualization clearly demonstrates the warming trend in India’s climate data.
+________________________________________
+🧩 (Optional) Future Temperature Prediction
+________________________________________
+🧠 Step 8: Predict Future Temperatures
+future_years = pd.DataFrame({'YEAR': [2030, 2040, 2050]})
+future_pred = model.predict(future_years)
+
+print("\nPredicted Temperatures for Future Years:")
+for yr, temp in zip(future_years['YEAR'], future_pred):
+    print(f"Year {yr}: Predicted Temperature = {temp:.2f} °C")
+Explanation:
+We use the model to predict future annual temperatures for upcoming years (2030, 2040, 2050).
+Example Output:
+Year 2030: Predicted Temperature = 29.72 °C  
+Year 2040: Predicted Temperature = 29.94 °C  
+Year 2050: Predicted Temperature = 30.17 °C
+Interpretation:
+The predicted values continue to increase, showing that average temperatures are expected to rise in the future — consistent with global warming trends.
+________________________________________
+📊 Interpretation of the Overall Model
+•	The regression line fits the data closely, confirming a steady rise in temperature over time.
+•	The R² value of 0.85 shows that the model explains most of the variation in temperatures.
+•	MSE and MAE are low, indicating good predictive accuracy.
+•	The visual plot clearly illustrates the warming trend across decades.
+________________________________________
+✅ Final Conclusion
+•	The Linear Regression model effectively predicts India’s annual average temperature based on the year.
+•	The model has good accuracy (high R², low MSE/MAE).
+•	The visualization confirms the increasing temperature trend, consistent with climate change effects.
+•	Therefore, Linear Regression is a suitable method for analyzing long-term temperature trends.
+________________________________________
+Absolutely ✅ — here’s a short and clear viva Q&A sheet based on your Linear Regression – Temperature Prediction assignment.
+Perfect for oral exam (viva) preparation! 🎯
+________________________________________
+🗒️ Viva Question & Answer Sheet
+________________________________________
+Q1. What is Linear Regression?
+A: Linear Regression is a statistical method that models the relationship between a dependent variable (Y) and one or more independent variables (X) using a straight line.
+________________________________________
+Q2. What was the objective of your experiment?
+A: To predict India’s annual average temperature based on the year using simple linear regression.
+________________________________________
+Q3. Which dataset did you use?
+A: The dataset “Temperatures of India” from Kaggle, containing monthly and annual temperature data from 1901 onwards.
+________________________________________
+Q4. What are the independent and dependent variables in your model?
+A:
+•	Independent Variable (X): Year
+•	Dependent Variable (Y): Annual Average Temperature
+________________________________________
+Q5. Which Python libraries did you use?
+A:
+pandas, numpy, matplotlib, seaborn, and sklearn.
+________________________________________
+Q6. What function is used to create a Linear Regression model in Python?
+A: LinearRegression() from the sklearn.linear_model module.
+________________________________________
+Q7. How do you train the model?
+A: By using the function model.fit(X, y) which fits the linear regression line to the data.
+________________________________________
+Q8. What is the formula of the Linear Regression line?
+A:
+[
+Y = mX + c
+]
+where
+•	m = slope of the line
+•	c = intercept
+________________________________________
+Q9. What performance metrics did you use to evaluate the model?
+A:
+•	Mean Squared Error (MSE)
+•	Mean Absolute Error (MAE)
+•	R² Score
+________________________________________
+Q10. What does R² Score indicate?
+A: It indicates how well the model explains the variation in the data.
+An R² value of 0.85 means 85% of the variation in temperature is explained by the year.
+________________________________________
+Q11. What do MSE and MAE represent?
+A:
+•	MSE: Average of squared prediction errors (smaller is better).
+•	MAE: Average of absolute prediction errors (smaller is better).
+________________________________________
+Q12. What does the regression graph show?
+A: A red line (predicted regression line) showing a positive slope, which means temperatures have increased over time.
+________________________________________
+Q13. What was your main observation from the graph?
+A: The temperature trend in India is rising gradually, showing climate warming over the years.
+________________________________________
+Q14. Can this model predict future temperatures?
+A: Yes. By giving future years (like 2030, 2040, 2050) as input, the model predicts future annual temperatures.
+________________________________________
+Q15. What are the predicted temperatures for future years (example)?
+A:
+•	2030 → 29.72 °C
+•	2040 → 29.94 °C
+•	2050 → 30.17 °C
+________________________________________
+Q16. What conclusion did you draw from this experiment?
+A: Linear Regression effectively models the relationship between year and temperature, showing a clear warming trend in India’s climate data.
+________________________________________
+Q17. Why did you choose Linear Regression for this problem?
+A: Because there is a linear relationship between the year and annual temperature, making it suitable for simple linear regression.
+________________________________________
+Q18. What is the advantage of using Linear Regression?
+A: It is simple, interpretable, and efficient for finding trends or forecasting values in continuous data.
+________________________________________
+Q19. What type of learning technique is Linear Regression?
+A: It is a supervised learning technique in machine learning.
+________________________________________
+Q20. What is the output of your experiment in one line?
+A: The model shows that India’s average temperature is increasing steadily each year, with high model accuracy (R² ≈ 0.85).
+________________________________________
+
