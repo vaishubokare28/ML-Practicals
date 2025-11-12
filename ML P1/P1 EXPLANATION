@@ -1,0 +1,232 @@
+ML Practical 1. Data preparation
+________________________________________
+AIM:
+To perform data preparation and performance evaluation using the Heart Disease dataset.
+________________________________________
+DATASET LINK:
+https://www.kaggle.com/zhaoyingzhu/heartcsv
+________________________________________
+CODE & EXPLANATION
+________________________________________
+1️⃣ Import Required Libraries and Load Dataset
+import pandas as pd
+import numpy as np
+
+# Load dataset
+df = pd.read_csv("Heart.csv")
+
+# Display first few rows
+print("First 5 Rows of Dataset:\n")
+print(df.head())
+Explanation:
+•	pandas and numpy are imported for data handling.
+•	The dataset is read using pd.read_csv().
+•	.head() displays the top 5 records to understand the structure of the data.
+________________________________________
+2️⃣ Find Shape of the Data
+# Find shape of dataset
+print("Shape of Data (Rows, Columns):", df.shape)
+Explanation:
+•	.shape gives the total number of rows and columns in the dataset.
+•	Example: (303, 15) means 303 records and 15 attributes.
+________________________________________
+3️⃣ Check Missing Values
+# Check missing (NaN) values in each column
+print("\nMissing Values in Each Column:\n")
+print(df.isnull().sum())
+Explanation:
+•	.isnull() identifies missing entries.
+•	.sum() counts them for each column.
+•	Helps identify incomplete data (e.g., Ca has 4 missing values).
+________________________________________
+4️⃣ Find Data Types of Each Column
+# Check datatype of each column
+print("\nData Types of Columns:\n")
+print(df.dtypes)
+Explanation:
+•	.dtypes shows whether each column is numeric (int64, float64) or categorical (object).
+•	Helps decide preprocessing steps for model building.
+________________________________________
+5️⃣ Find Zero Values in Dataset
+# Count how many zero values exist in each column
+zero_counts = (df == 0).sum()
+
+print("\nCount of Zero Values in Each Column:\n")
+print(zero_counts)
+Explanation:
+•	(df == 0) returns True for every cell equal to zero.
+•	.sum() then counts the number of zeros per column.
+•	Useful to detect invalid or missing-like zero values (e.g., Fbs, Ca).
+________________________________________
+6️⃣ Find Mean Age of Patients
+# Calculate mean (average) age
+mean_age = df["Age"].mean()
+print(f"\nMean Age of Patients: {mean_age:.2f} years")
+Explanation:
+•	.mean() computes average age from the “Age” column.
+•	Average age ≈ 54.44 years → most patients are middle-aged.
+________________________________________
+7️⃣ Extract Specific Columns and Split Dataset
+# Select specific columns
+selected_cols = ["Age", "Sex", "ChestPain", "RestBP", "Chol"]
+subset = df[selected_cols]
+
+print("\nSelected Columns:\n", subset.head())
+
+# Split data into 75% training and 25% testing
+from sklearn.model_selection import train_test_split
+
+train, test = train_test_split(subset, test_size=0.25, random_state=0)
+
+print("\nTraining Set Shape :", train.shape)
+print("Testing Set Shape  :", test.shape)
+Explanation:
+•	Only required columns are extracted.
+•	train_test_split() divides dataset into training and testing subsets.
+•	random_state=0 ensures reproducible results.
+________________________________________
+8️⃣ Confusion Matrix and Performance Metrics
+# Import libraries
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Given problem data
+TP = 45   # True Positives
+FP = 55   # False Positives
+FN = 5    # False Negatives
+TN = 395  # True Negatives
+total = 500
+
+# Create confusion matrix
+cm = [[TP, FP],
+      [FN, TN]]
+
+# Calculate metrics
+accuracy = (TP + TN) / total
+precision = TP / (TP + FP)
+recall = TP / (TP + FN)
+f1 = 2 * (precision * recall) / (precision + recall)
+
+# Display results
+print("\nConfusion Matrix Values:")
+print(f"TP = {TP}, FP = {FP}, FN = {FN}, TN = {TN}")
+print(f"\nAccuracy : {accuracy:.2f}")
+print(f"Precision: {precision:.2f}")
+print(f"Recall   : {recall:.2f}")
+print(f"F1 Score : {f1:.2f}")
+Explanation:
+•	We manually define values for TP, FP, FN, TN as per problem.
+•	Accuracy, Precision, Recall, and F1 Score are computed using standard formulas.
+•	Results:
+o	Accuracy = 0.88
+o	Precision = 0.45
+o	Recall = 0.90
+o	F1 Score = 0.60
+________________________________________
+9️⃣ Visualize Confusion Matrix
+# Visualize confusion matrix
+sns.heatmap(cm, annot=True, fmt='d', cmap='YlGnBu',
+            xticklabels=['Predicted Positive', 'Predicted Negative'],
+            yticklabels=['Actual Positive', 'Actual Negative'])
+plt.title("Confusion Matrix for COVID Prediction")
+plt.xlabel("Predicted")
+plt.ylabel("Actual")
+plt.show()
+Explanation:
+•	seaborn.heatmap() is used to visually represent the confusion matrix.
+•	Each cell shows the number of predictions (TP, FP, FN, TN).
+•	Darker cells indicate higher values (e.g., many true negatives).
+________________________________________
+🔟 Summary of Results
+Metric Summary Table
+Metric	Formula	Value
+Accuracy	(TP + TN) / Total	0.88
+Precision	TP / (TP + FP)	0.45
+Recall	TP / (TP + FN)	0.90
+F1 Score	2 × (P × R) / (P + R)	0.60
+Explanation:
+•	Model has high recall → detects most positives.
+•	Moderate precision → some false alarms present.
+•	Overall accuracy is 88%, which is good for health screening models.
+________________________________________
+✅ Conclusion
+•	Dataset explored successfully (shape, missing values, zeros, mean age).
+•	Extracted relevant columns and split into training/testing sets.
+•	Evaluated performance using confusion matrix and metrics.
+•	The model achieves 88% accuracy with strong recall (90%), showing good detection capability.
+________________________________________
+🧾 Viva Question–Answer Sheet
+________________________________________
+1️⃣ What is the aim of this practical?
+Ans:
+To perform data preparation and evaluate performance metrics (Accuracy, Precision, Recall, F1-score) using the Heart Disease dataset.
+________________________________________
+2️⃣ What library is used to handle datasets in Python?
+Ans:
+pandas is used for loading and handling datasets in Python.
+________________________________________
+3️⃣ What does df.shape return?
+Ans:
+It returns the number of rows and columns in the dataset.
+Example: (303, 15) → 303 rows, 15 columns.
+________________________________________
+4️⃣ How do we check for missing values?
+Ans:
+Using df.isnull().sum(), which counts the number of missing (NaN) values in each column.
+________________________________________
+5️⃣ What is the purpose of checking data types?
+Ans:
+To know which columns are numerical or categorical so that we can apply proper preprocessing or encoding techniques.
+________________________________________
+6️⃣ Why do we check for zero values?
+Ans:
+Because sometimes 0 can represent missing or invalid data (e.g., in medical or sensor datasets).
+________________________________________
+7️⃣ How do we find the mean age of patients?
+Ans:
+By using df["Age"].mean() — it gives the average age of all patients.
+________________________________________
+8️⃣ What is the use of train_test_split()?
+Ans:
+It divides the dataset into training and testing sets for model building and evaluation.
+Usually: 75% training and 25% testing.
+________________________________________
+9️⃣ What is a Confusion Matrix?
+Ans:
+It is a 2×2 table showing how many predictions were correct or incorrect:
+	Predicted +	Predicted -
+Actual +	True Positive	False Negative
+Actual -	False Positive	True Negative
+________________________________________
+🔟 Define Accuracy, Precision, Recall, and F1 Score.
+Ans:
+•	Accuracy: (TP + TN) / Total → overall correctness
+•	Precision: TP / (TP + FP) → correctness of positive predictions
+•	Recall: TP / (TP + FN) → how many actual positives were found
+•	F1 Score: 2 × (Precision × Recall) / (Precision + Recall) → balance between precision & recall
+________________________________________
+1️⃣1️⃣ What were the metric values in this experiment?
+Ans:
+•	Accuracy = 0.88
+•	Precision = 0.45
+•	Recall = 0.90
+•	F1 Score = 0.60
+________________________________________
+1️⃣2️⃣ What does high recall indicate in this context?
+Ans:
+It means the model is good at identifying most of the actual positive (heart disease) cases — fewer false negatives.
+________________________________________
+1️⃣3️⃣ Why is recall important in medical datasets?
+Ans:
+Because missing a positive case (disease) is more serious than a false alarm. Hence, high recall is crucial.
+________________________________________
+1️⃣4️⃣ What is the average age of patients in the dataset?
+Ans:
+Around 54 years, meaning most patients are middle-aged adults.
+________________________________________
+1️⃣5️⃣ What is the final conclusion of this practical?
+Ans:
+The Heart dataset was successfully analyzed and cleaned.
+Performance evaluation showed 88% accuracy and high recall, which is ideal for medical prediction tasks.
+________________________________________
+
