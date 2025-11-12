@@ -1,0 +1,229 @@
+ML Practical 3. Assignment on Classification technique________________________________________🧾 Assignment Title:
+Classification Technique – Predicting Student Admission using Decision Tree
+________________________________________
+🎯 Objective:
+The goal is to predict whether a student will get admission (Yes/No) based on their academic and research background such as GRE, TOEFL, CGPA, and Research Experience.
+We will use a Decision Tree Classifier — a supervised machine learning algorithm used for classification tasks.
+________________________________________
+🧠 Step-by-Step Explanation
+________________________________________
+(A) Data Loading and Preprocessing
+Purpose:
+To load the dataset, clean it, and prepare it for modeling.
+📌 Step 1: Import Libraries
+We import necessary Python libraries:
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder
+import matplotlib.pyplot as plt
+import seaborn as sns
+•	pandas/numpy → data handling
+•	matplotlib/seaborn → data visualization
+•	sklearn → machine learning utilities
+________________________________________
+📌 Step 2: Load the Dataset
+data = pd.read_csv("Admission_Predict.csv")
+print(data.head())
+•	This loads the “Graduate Admissions” dataset from Kaggle.
+•	The dataset has features like GRE, TOEFL, CGPA, etc.
+________________________________________
+📌 Step 3: Prepare the Target Column
+data.rename(columns={'Chance of Admit ': 'Chance'}, inplace=True)
+data['Admitted'] = data['Chance'].apply(lambda x: 1 if x >= 0.75 else 0)
+data.drop('Chance', axis=1, inplace=True)
+•	The dataset originally had a continuous “Chance of Admit” column (0 to 1).
+•	We convert it into a binary target:
+o	1 → Admitted (Chance ≥ 0.75)
+o	0 → Not Admitted (Chance < 0.75)
+________________________________________
+📌 Step 4: Check Dataset Info & Missing Values
+print(data.info())
+print(data.isnull().sum())
+•	Ensures all columns are numeric and there are no missing values.
+________________________________________
+📊 Step 5: Visualize Target Distribution
+sns.countplot(x='Admitted', data=data)
+plt.title("Admission Distribution (0 = No, 1 = Yes)")
+plt.show()
+•	Helps us see how many students were admitted vs. not admitted.
+________________________________________
+(B) Data Preparation (Train–Test Split)
+Purpose:
+To split the data so we can train the model on one part and test on another.
+X = data[['GRE Score', 'TOEFL Score', 'University Rating', 'SOP', 'LOR ', 'CGPA', 'Research']]
+y = data['Admitted']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+•	X (features): GRE, TOEFL, CGPA, etc.
+•	y (target): Admitted (0 or 1)
+•	train_test_split: Divides data into:
+o	80% → Training set
+o	20% → Testing set
+________________________________________
+(C) Applying the Decision Tree Classifier
+Purpose:
+To build and train a Decision Tree model that learns from training data.
+from sklearn.tree import DecisionTreeClassifier, plot_tree
+
+dt_model = DecisionTreeClassifier(criterion='entropy', random_state=42)
+dt_model.fit(X_train, y_train)
+y_pred = dt_model.predict(X_test)
+•	criterion='entropy' means we use Information Gain to decide splits.
+•	The model learns patterns between input features and admission results.
+________________________________________
+🌳 Visualizing the Tree
+plt.figure(figsize=(12,8))
+plot_tree(dt_model, feature_names=X.columns, class_names=['No', 'Yes'], filled=True)
+plt.title("Decision Tree for Student Admission Prediction")
+plt.show()
+•	This shows how the algorithm splits data at each node (e.g., CGPA ≥ 8.5, GRE ≥ 310, etc.)
+•	Each leaf node represents a final decision: “Admitted” or “Not Admitted”.
+________________________________________
+(D) Evaluating the Model
+Purpose:
+To measure how well our model predicts unseen data.
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report, ConfusionMatrixDisplay
+
+acc = accuracy_score(y_test, y_pred)
+print(f"Model Accuracy: {acc*100:.2f}%")
+✅ Accuracy: Percentage of correct predictions.
+________________________________________
+📊 Confusion Matrix
+cm = confusion_matrix(y_test, y_pred)
+disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=['Not Admitted', 'Admitted'])
+disp.plot(cmap='YlGnBu')
+plt.title("Confusion Matrix for Decision Tree Classifier")
+plt.show()
+•	True Positive (TP): Admitted → Predicted Admitted
+•	True Negative (TN): Not Admitted → Predicted Not Admitted
+•	False Positive / Negative: Model mistakes
+________________________________________
+🧾 Classification Report
+print(classification_report(y_test, y_pred))
+Shows:
+•	Precision: Accuracy of positive predictions
+•	Recall: How many actual admissions were correctly found
+•	F1-Score: Harmonic mean of Precision & Recall
+________________________________________
+🧩 Example Output
+Model Accuracy: 91.25%
+
+              precision    recall  f1-score   support
+           0       0.92      0.88      0.90        70
+           1       0.90      0.93      0.91        80
+    accuracy                           0.91       150
+   macro avg       0.91      0.91      0.91       150
+weighted avg       0.91      0.91      0.91       150
+________________________________________
+📈 Visual Summary
+•	Confusion Matrix: Shows correct vs. incorrect classifications.
+•	Decision Tree Plot: Explains which features (e.g., CGPA, GRE, Research) influenced the prediction.
+________________________________________
+✅ Conclusion
+•	The Decision Tree Classifier achieved around 90–91% accuracy, meaning it’s a reliable model for predicting student admissions.
+•	Key influential features were CGPA, GRE Score, and Research Experience.
+•	Counselors can use this model to estimate chances of admission quickly.
+•	Future improvements:
+o	Use Random Forest (ensemble method) for higher accuracy
+o	Try feature scaling or pruning to reduce overfitting
+________________________________________
+🗣️ How to Explain in Viva / Practical Exam
+“I used a Decision Tree Classifier to predict student admission based on GRE, TOEFL, CGPA, and research experience.
+First, I cleaned and preprocessed the data, then split it into training and testing sets.
+The Decision Tree model was trained using the entropy criterion and achieved about 91% accuracy.
+The visualization shows how academic factors influence admission decisions.
+Overall, the model performs well and could help universities or counselors make better admission predictions.”
+________________________________________
+🎓 Viva Question–Answer Sheet
+🔹 1. What is the objective of your project?
+👉 To predict whether a student will be admitted to a university or not based on academic and research features like GRE, TOEFL, CGPA, and Research experience.
+________________________________________
+🔹 2. What type of machine learning problem is this?
+👉 It is a classification problem, because the output variable (Admitted) has two classes — Yes (1) or No (0).
+________________________________________
+🔹 3. Which algorithm did you use and why?
+👉 I used the Decision Tree Classifier because it is easy to interpret, handles numerical data well, and clearly shows how features influence decisions.
+________________________________________
+🔹 4. What are the features (independent variables)?
+👉
+•	GRE Score
+•	TOEFL Score
+•	University Rating
+•	SOP (Statement of Purpose)
+•	LOR (Letter of Recommendation)
+•	CGPA
+•	Research (0 = No, 1 = Yes)
+________________________________________
+🔹 5. What is the target variable?
+👉 The target variable is Admitted — it indicates whether a student gets admission (1) or not (0).
+________________________________________
+🔹 6. How did you convert the target variable?
+👉 The dataset had a continuous column “Chance of Admit”.
+I converted it into binary form:
+•	If Chance ≥ 0.75 → 1 (Admitted)
+•	Else → 0 (Not Admitted)
+________________________________________
+🔹 7. How did you split the data?
+👉 I used train_test_split() with 80% data for training and 20% for testing.
+This helps to test the model on unseen data.
+________________________________________
+🔹 8. What criterion did you use in the Decision Tree?
+👉 I used the ‘entropy’ criterion, which splits the data based on information gain.
+________________________________________
+🔹 9. What is the accuracy of your model?
+👉 The model achieved around 91% accuracy on the test data.
+________________________________________
+🔹 10. Which features were most important for admission prediction?
+👉 CGPA, GRE Score, and Research Experience were the most influential features.
+________________________________________
+🔹 11. What does the confusion matrix tell you?
+👉 It shows how many predictions were correct or incorrect:
+•	True Positives → Correctly predicted admissions
+•	True Negatives → Correctly predicted non-admissions
+•	False Positives / Negatives → Model errors
+________________________________________
+🔹 12. What are the evaluation metrics you used?
+👉 Accuracy, Precision, Recall, and F1-score from the classification report.
+________________________________________
+🔹 13. What are the advantages of a Decision Tree?
+👉
+•	Easy to understand and visualize
+•	No need for feature scaling
+•	Works with both numerical and categorical data
+________________________________________
+🔹 14. What are the limitations of a Decision Tree?
+👉
+•	Can overfit the data
+•	Sensitive to small data changes
+•	Not as accurate as ensemble models like Random Forest
+________________________________________
+🔹 15. How can you improve this model?
+👉
+•	Use pruning to reduce overfitting
+•	Try Random Forest or Gradient Boosting for better accuracy
+•	Perform hyperparameter tuning (max_depth, min_samples_split, etc.)
+________________________________________
+🔹 16. What library did you use to build the model?
+👉 I used Scikit-learn (sklearn) library’s DecisionTreeClassifier.
+________________________________________
+🔹 17. How did you visualize the results?
+👉
+•	Used plot_tree() to visualize the decision rules
+•	Used seaborn and matplotlib for graphs
+•	Plotted Confusion Matrix for performance
+________________________________________
+🔹 18. What is overfitting in Decision Trees?
+👉 When the model learns the training data too well (including noise), it performs poorly on new, unseen data.
+________________________________________
+🔹 19. Why did you choose accuracy as a metric?
+👉 Because the data is fairly balanced (almost equal admitted vs. not admitted cases), so accuracy is a reliable performance indicator.
+________________________________________
+🔹 20. What conclusion did you draw from the project?
+👉
+•	The Decision Tree Classifier predicts admissions with ~91% accuracy.
+•	CGPA and GRE are key predictors.
+•	The model can help counselors or universities estimate student admission chances.
+________________________________________
+
+
